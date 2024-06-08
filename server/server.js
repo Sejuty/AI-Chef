@@ -1,45 +1,52 @@
 const express = require("express");
 const cors = require("cors");
-const { default: ollama } = require('ollama');
+const { default: ollama } = require("ollama");
+const { json } = require("body-parser");
 
 const app = express();
 const PORT = 3001;
 
 app.use(cors());
 
-// app.get("/recipeStream", (req, res) => {
-//   const ingredients = req.query.ingredients;
-//   const mealType = req.query.mealType;
-//   const cuisine = req.query.cuisine;
-//   const cookingTime = req.query.cookingTime;
-//   const complexity = req.query.complexity;
+app.get("/recipe", async (req, res) => {
+  const ingredients = req.query.ingredients;
+  const mealType = req.query.mealType;
+  const cuisine = req.query.cuisine;
+  const cookingTime = req.query.cookingTime;
+  const complexity = req.query.complexity;
 
-//   res.setHeader("Content-Type", "text/event-stream");
-//   res.setHeader("Cache-Control", "no-cache");
-//   res.setHeader("Connection", "keep-alive");
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
 
-//   const sendEvent = (chunk)=>{
+  const sendEvent = (chunk) => {
+    res.write(`data: ${chunk}\n\n`);
+  };
 
-//   }
-// });
-
-
-
-
-async function chatWithLlama() {
   try {
-    const response = await ollama.chat({
-      model: 'mistral',
-      messages: [{ role: 'user', content: 'Create a recipe with the following instruction. Ingredients: 2 egges and potatoes, MealType: breakfast, cuisine :italian, cookingTime : % min, complexity : chef ' }],
+    const prompt = `Create a recipe with the following instructions. Ingredients: ${ingredients}, MealType: ${mealType}, Cuisine: ${cuisine}, CookingTime: ${cookingTime}, Complexity: ${complexity}. The response will contain three main section, Title, Ingredients and Instruction.`;
+    // const prompt = `Write me a knock knock joke`;
+    const response = await ollama.generate({
+      model: "mistral",
+      prompt: prompt,
+      format: json,
+      raw: true,
+      keep_alive: 10000
+      // stream: true
     });
-    console.log(response.message.content);
+
+    console.log(response.response)
+    // Assuming the response is an object containing the recipe details
+    sendEvent(response.response);
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
+    sendEvent("Error generating recipe.");
   }
-}
 
-chatWithLlama();
-
+  res.on("close", () => {
+    res.end();
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

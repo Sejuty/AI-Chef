@@ -8,11 +8,14 @@ const PORT = 3001;
 app.use(cors());
 
 app.get("/recipeStream", async (req, res) => {
-  const ingredients = req.query.ingredients;
-  const mealType = req.query.mealType;
-  const cuisine = req.query.cuisine;
-  const cookingTime = req.query.cookingTime;
-  const complexity = req.query.complexity;
+  let { ingredients, mealType, cuisine, cookingTime, complexity } = req.query;
+
+  // Encode spaces in the query parameters
+  ingredients = encodeURIComponent(ingredients);
+  mealType = encodeURIComponent(mealType);
+  cuisine = encodeURIComponent(cuisine);
+  cookingTime = encodeURIComponent(cookingTime);
+  complexity = encodeURIComponent(complexity);
 
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
@@ -24,12 +27,14 @@ app.get("/recipeStream", async (req, res) => {
 
   try {
     const prompt = `Create a recipe with the following instructions. Ingredients: ${ingredients}, MealType: ${mealType}, Cuisine: ${cuisine}, CookingTime: ${cookingTime}, Complexity: ${complexity}. The response will contain three main sections: Title, Ingredients, and Instructions.`;
-    
+
     const response = await ollama.generate({
       model: "mistral",
       prompt: prompt,
+      // keep_alive: 10000,
     });
 
+    console.log(JSON.stringify(response.response));
     sendEvent(JSON.stringify(response.response));
   } catch (error) {
     console.error("Error:", error);

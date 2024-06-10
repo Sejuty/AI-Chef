@@ -30,8 +30,6 @@ function App() {
     }));
   };
 
-  console.log(recipe);
-
   const generateRecipe = () => {
     setLoading(true);
     setError("");
@@ -39,18 +37,13 @@ function App() {
       recipeInfo;
 
     const eventSource = new EventSource(
-      `http://localhost:3001/recipeStream?ingredients=${encodeURIComponent(
-        ingredients
-      )}&mealType=${encodeURIComponent(mealType)}&cuisine=${encodeURIComponent(
-        cuisine
-      )}&cookingTime=${encodeURIComponent(
-        cookingTime
-      )}&complexity=${encodeURIComponent(complexity)}`
+      `http://localhost:3001/recipeStream?ingredients=${ingredients}&mealType=${mealType}&cuisine=${cuisine}&cookingTime=${cookingTime}&complexity=${complexity}`
     );
 
     eventSource.onmessage = (event) => {
       setLoading(false);
-      setRecipe(event.data);
+      const formattedData = event.data.replace(/\\n/g, "\n");
+      setRecipe(formattedData);
     };
 
     eventSource.onerror = () => {
@@ -60,7 +53,7 @@ function App() {
     };
 
     eventSource.onopen = () => {
-      console.log("Connection to event stream opened.");
+      console.log("Generating Recipe...");
     };
 
     eventSource.addEventListener("close", () => {

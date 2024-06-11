@@ -1,6 +1,5 @@
-import "./App.css";
 import { useState } from "react";
-// import axios from "axios";
+import "./index.css";
 
 function App() {
   const [recipeInfo, setRecipeInfo] = useState({
@@ -42,6 +41,7 @@ function App() {
 
     eventSource.onmessage = (event) => {
       setLoading(false);
+
       const formattedData = event.data.replace(/\\n/g, "\n");
       setRecipe(formattedData);
     };
@@ -64,7 +64,7 @@ function App() {
     <div>
       <h1>Recipe Generator</h1>
       <div>
-        <label>Ingredients: </label>
+        <label className="text-red-500">Ingredients: </label>
         <input
           type="text"
           name="ingredients"

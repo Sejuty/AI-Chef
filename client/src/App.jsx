@@ -1,5 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./index.css";
+import { Input, Select } from "@chakra-ui/react";
+import {
+  COMPLEXITY_OPTIONS,
+  COOKING_TIME_OPTIONS,
+  CUISINE_OPTIONS,
+  MEAL_OPTIONS,
+} from "./constant";
+
+import BIRDS from "vanta/dist/vanta.fog.min";
 
 function App() {
   const [recipeInfo, setRecipeInfo] = useState({
@@ -9,6 +18,21 @@ function App() {
     cookingTime: "",
     complexity: "",
   });
+
+  const [vantaEffect, setVantaEffect] = useState(null);
+  const myRef = useRef(null);
+  useEffect(() => {
+    if (!vantaEffect) {
+      setVantaEffect(
+        BIRDS({
+          el: myRef.current,
+        })
+      );
+    }
+    return () => {
+      if (vantaEffect) vantaEffect.destroy();
+    };
+  }, [vantaEffect]);
 
   const [recipe, setRecipe] = useState("");
   const [loading, setLoading] = useState(false);
@@ -60,53 +84,65 @@ function App() {
       eventSource.close();
     });
   };
+
   return (
-    <div>
+    <div ref={myRef}>
       <h1>Recipe Generator</h1>
       <div>
         <label className="text-red-500">Ingredients: </label>
-        <input
-          type="text"
-          name="ingredients"
+        <Input
           value={recipeInfo.ingredients}
           onChange={handleChange}
+          placeholder="Ingredients"
         />
       </div>
       <div>
-        <label>Meal Type: </label>
-        <input
-          type="text"
-          name="mealType"
-          value={recipeInfo.mealType}
-          onChange={handleChange}
-        />
+        {/* <label>Meal Type: </label> */}
+        <Select placeholder="Meal Type">
+          {MEAL_OPTIONS.map((meal, index) => {
+            return (
+              <option key={index} value={meal.value}>
+                {meal.label}
+              </option>
+            );
+          })}
+        </Select>
       </div>
       <div>
-        <label>Cuisine: </label>
-        <input
-          type="text"
-          name="cuisine"
-          value={recipeInfo.cuisine}
-          onChange={handleChange}
-        />
+        {/* <label>Cuisine: </label> */}
+        <Select placeholder="Cuisine">
+          {CUISINE_OPTIONS.map((item, index) => {
+            return (
+              <option key={index} value={item.value}>
+                {item.label}
+              </option>
+            );
+          })}
+        </Select>
       </div>
       <div>
-        <label>Cooking Time: </label>
-        <input
-          type="text"
-          name="cookingTime"
-          value={recipeInfo.cookingTime}
-          onChange={handleChange}
-        />
+        {/* <label>Cooking Time: </label> */}
+        <Select placeholder="Cooking Time">
+          {COOKING_TIME_OPTIONS.map((item, index) => {
+            return (
+              <option key={index} value={item.value}>
+                {item.label}
+              </option>
+            );
+          })}
+        </Select>
       </div>
       <div>
-        <label>Complexity: </label>
-        <input
-          type="text"
-          name="complexity"
-          value={recipeInfo.complexity}
-          onChange={handleChange}
-        />
+        {/* <label>Complexity: </label> */}
+        <Select placeholder="Comlplexity">
+          {COMPLEXITY_OPTIONS.map((item, index) => {
+            return (
+              <option key={index} value={item.value}>
+                {item.label}
+              </option>
+            );
+          })}
+        </Select>
       </div>
       <button onClick={generateRecipe} disabled={loading}>
         {loading ? "Generating..." : "Generate Recipe"}

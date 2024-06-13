@@ -31,6 +31,11 @@ function App() {
     };
   }, [vantaEffect]);
 
+  // const a =
+  //   " Title: Quick French Brunch: Rice and Potato Hash\n\nIngredients:\n- 1 cup cooked rice (preferably basmati or jasmine)\n- 2 medium-sized potatoes, peeled and diced\n- Salt, to taste\n- Pepper, to taste\n- 2 tablespoons olive oil\n- 1 small onion, finely chopped\n- 2 cloves garlic, minced\n- 1 tablespoon fresh parsley, chopped (optional)\n- 2 large eggs\n\nInstructions:\n\n1. In a large skillet over medium heat, warm up 1 tablespoon of olive oil. Add the diced potatoes and season with salt and pepper. Cook for about 8 minutes or until potatoes are tender and lightly browned. Stir occasionally to prevent sticking.\n\n2. Remove the cooked potatoes from the skillet and set them aside in a bowl. Do not clean the skillet.\n\n3. In the same skillet, heat the remaining 1 tablespoon of olive oil over medium heat. Add the chopped onion and cook until it becomes translucent, about 2-3 minutes. Stir in the minced garlic and cook for another minute.\n\n4. Add the cooked rice to the skillet with the sautéed onions and garlic. Mix well to combine.\n\n5. Return the cooked potatoes to the skillet and gently stir to distribute them throughout the rice mixture. Cook for an additional 2 minutes, allowing the flavors to meld together.\n\n6. Create two small indentations in the hash using a spoon. Crack an egg into each indention. Reduce heat to low, cover the skillet, and cook the eggs until whites are set (about 4-5 minutes). You can also cover the skillet and let the eggs finish cooking if you prefer over-easy or over-hard eggs.\n\n7. Sprinkle the hash with fresh parsley before serving for added flavor. Enjoy your quick French brunch!"
+  //     .replace(/\n\n/g, "<br /> <br />")
+  //     .replace(/\n/g, " <br/>");
+
   const [ingredients, setIngredients] = useState("");
   const [mealType, setMealType] = useState("");
   const [cuisine, setCuisine] = useState("");
@@ -91,7 +96,7 @@ function App() {
   };
 
   return (
-    <div ref={myRef} className="h-screen p-5 ">
+    <div ref={myRef} className="h-full min-h-screen p-5">
       <h1 className="text-white text-center py-6 text-xl">Recipe Generator</h1>
       <div className="flex flex-col gap-5 items-center ">
         <div className="w-1/2">
@@ -153,9 +158,18 @@ function App() {
         </button>
         {error && <p style={{ color: "red" }}>{error}</p>}
         {recipe && (
-          <div>
-            <h2>Generated Recipe</h2>
-            <pre>{recipe}</pre>
+          <div className="w-2/3 px-3 pb-5 border border-white rounded text-white mt-7">
+            <h2 className="text-center  text-2xl py-6 pb-5 border-b ">
+              Generated Recipe
+            </h2>
+            <div
+              className="mt-5 px-3"
+              dangerouslySetInnerHTML={{
+                __html: recipe
+                  .replace(/\n\n/g, "<br /> <br />")
+                  .replace(/\n/g, " <br/>"),
+              }}
+            ></div>
           </div>
         )}
       </div>

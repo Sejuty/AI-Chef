@@ -1,4 +1,4 @@
-export const CUISINE_OPTIONS = [
+const CUISINE_OPTIONS = [
   { label: "Italian", value: "italian" },
   { label: "Chinese", value: "chinese" },
   { label: "Mexican", value: "mexican" },
@@ -16,7 +16,7 @@ export const CUISINE_OPTIONS = [
   { label: "Caribbean", value: "caribbean" },
 ];
 
-export const MEAL_OPTIONS = [
+const MEAL_OPTIONS = [
   { label: "Breakfast", value: "breakfast" },
   { label: "Brunch", value: "brunch" },
   { label: "Lunch", value: "lunch" },
@@ -24,8 +24,7 @@ export const MEAL_OPTIONS = [
   { label: "Snack", value: "snack" },
   { label: "Dessert", value: "dessert" },
 ];
-
-export const COOKING_TIME_OPTIONS = [
+const COOKING_TIME_OPTIONS = [
   { label: "Under 15 minutes", value: "Under 15 minutes" },
   { label: "15-30 minutes", value: "15-30 minutes" },
   { label: "30-45 minutes", value: "30-45 minutes" },
@@ -34,8 +33,17 @@ export const COOKING_TIME_OPTIONS = [
   { label: "Over 2 hours", value: "Over 2 hours" },
 ];
 
-export const COMPLEXITY_OPTIONS = [
+const COMPLEXITY_OPTIONS = [
   { label: "Easy", value: "Easy" },
   { label: "Medium", value: "Medium" },
   { label: "Hard", value: "Hard" },
 ];
+
+export const OPTIONS = [
+  MEAL_OPTIONS,
+  CUISINE_OPTIONS,
+  COOKING_TIME_OPTIONS,
+  COMPLEXITY_OPTIONS,
+];
+
+export const CURRENT_STATES = ["mealType", "cuisine", "cookingTime", "complexity"];

@@ -1,33 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import "./index.css";
-import {
-  COMPLEXITY_OPTIONS,
-  COOKING_TIME_OPTIONS,
-  CUISINE_OPTIONS,
-  MEAL_OPTIONS,
-} from "./constant";
+import { CURRENT_STATES, OPTIONS } from "./constant";
 
 import FOG from "vanta/dist/vanta.fog.min";
 
 function App() {
-  const [ingredients, setIngredients] = useState("");
-  const [mealType, setMealType] = useState("");
-  const [cuisine, setCuisine] = useState("");
-  const [cookingTime, setCookingTime] = useState("");
-  const [complexity, setComplexity] = useState("");
-
-  const [collapsedOption, setCollapsedOption] = useState([
-    false,
-    false,
-    false,
-    false,
-  ]);
-
-  const updateCollapsedOption = (index) => {
-    setCollapsedOption((prev) => prev.map((_, i) => i === index));
-  };
-  const [current, setCurrent] = useState("mealType");
-
   const [vantaEffect, setVantaEffect] = useState(null);
   const myRef = useRef(null);
   useEffect(() => {
@@ -54,9 +31,29 @@ function App() {
     };
   }, [vantaEffect]);
 
+  const [ingredients, setIngredients] = useState("");
+  const [mealType, setMealType] = useState("");
+  const [cuisine, setCuisine] = useState("");
+  const [cookingTime, setCookingTime] = useState("");
+  const [complexity, setComplexity] = useState("");
+
+  const [collapsedOption, setCollapsedOption] = useState([
+    false,
+    false,
+    false,
+    false,
+  ]);
+  const updateCollapsedOption = (index) => {
+    setCollapsedOption((prev) => prev.map((_, i) => i === index));
+  };
+  const [current, setCurrent] = useState("");
+
   const [recipe, setRecipe] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const stateValues = [mealType, cuisine, cookingTime, complexity];
+  const stateSetters = [setMealType, setCuisine, setCookingTime, setComplexity];
 
   const generateRecipe = () => {
     setLoading(true);
@@ -87,159 +84,71 @@ function App() {
     });
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      setCurrent("mealType");
+    }
+  };
+
   return (
     <div ref={myRef} className="h-screen p-5 ">
-      <h1>Recipe Generator</h1>
+      <h1 className="text-white text-center py-6 text-xl">Recipe Generator</h1>
       <div className="flex flex-col gap-5 items-center ">
         <div className="w-1/2">
-          {/* <label className="text-red-500">Ingredients: </label> */}
           <input
             value={ingredients}
             onChange={(e) => {
               setIngredients(e.target.value);
             }}
+            onKeyDown={handleKeyDown}
             placeholder="Ingredients"
             name="ingredients"
             className="w-full px-3 py-2 rounded bg-transparent border border-white text-white"
           />
         </div>
-        <div className="w-1/2">
-          <div
-            placeholder="Meal Type"
-            className="relative w-full px-3 py-2 rounded bg-transparent border border-white text-white"
-          >
-            {current === "mealType" ? (
-              MEAL_OPTIONS.map((item, index) => {
-                return (
-                  <div
-                    key={index}
-                    value={item.value}
-                    className={`bg-transparent ${
-                      collapsedOption[0] ? "hidden" : ""
-                    }`}
-                  >
-                    <div
-                      className={`px-3 py-2 hover:bg-[#3433333c] rounded cursor-pointer `}
-                      onClick={() => {
-                        setCurrent("cuisine");
-                        setMealType(item.value);
-                        updateCollapsedOption(0);
-                      }}
-                    >
-                      {item.label}
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div>{mealType}</div>
-            )}
-          </div>
-        </div>
-        <div className="w-1/2">
-          <div
-            data-text="Cuisine"
-            className="relative w-full px-3 py-2 rounded bg-transparent border border-white text-white"
-          >
-            {current === "cuisine" ? (
-              CUISINE_OPTIONS.map((item, index) => {
-                return (
-                  <div
-                    key={index}
-                    value={item.value}
-                    className={`bg-transparent ${
-                      collapsedOption[1] ? "hidden" : ""
-                    }`}
-                  >
-                    <div
-                      className={`px-3 py-2 hover:bg-[#3433333c] rounded cursor-pointer `}
-                      onClick={() => {
-                        // handleSelectedOption();
-                        setCurrent("cookingTime");
-                        setCuisine(item.value);
-                        updateCollapsedOption(1);
-                      }}
-                    >
-                      {item.label}
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div>{cuisine}</div>
-            )}
-          </div>
-        </div>
-        <div className="w-1/2">
-          <div
-            data-text="Cooking Time"
-            className="relative w-full px-3 py-2 rounded bg-transparent border border-white text-white"
-          >
-            {current === "cookingTime" ? (
-              COOKING_TIME_OPTIONS.map((item, index) => {
-                return (
-                  <div
-                    key={index}
-                    value={item.value}
-                    className={`bg-transparent ${
-                      collapsedOption[2] ? "hidden" : ""
-                    }`}
-                  >
-                    <div
-                      className={`px-3 py-2 hover:bg-[#3433333c] rounded cursor-pointer `}
-                      onClick={() => {
-                        // handleSelectedOption();
-                        setCurrent("complexity");
-                        setCookingTime(item.value);
-                        updateCollapsedOption(2);
-                      }}
-                    >
-                      {item.label}
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div>{cookingTime}</div>
-            )}
-          </div>
-        </div>
-        <div className="w-1/2">
-          <div
-            data-text="Complexity"
-            className="relative w-full px-3 py-2 rounded bg-transparent border border-white text-white"
-          >
-            {current === "complexity" ? (
-              COMPLEXITY_OPTIONS.map((item, index) => {
-                return (
-                  <div
-                    key={index}
-                    value={item.value}
-                    className={`bg-transparent ${
-                      collapsedOption[3] ? "hidden" : ""
-                    }`}
-                  >
-                    <div
-                      className={`px-3 py-2 hover:bg-[#3433333c] rounded cursor-pointer `}
-                      onClick={() => {
-                        // handleSelectedOption();
-                        setCurrent("");
-                        setComplexity(item.value);
-                        updateCollapsedOption(3);
-                      }}
-                    >
-                      {item.label}
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div>{complexity}</div>
-            )}
-          </div>
+        <div className="w-1/2 flex flex-col gap-5">
+          {OPTIONS.map((_, renderSelectIndex) => {
+            return (
+              <div
+                key={renderSelectIndex}
+                className="relative w-full px-3 py-2 rounded bg-transparent border border-white text-white"
+              >
+                {current === CURRENT_STATES[renderSelectIndex] ? (
+                  OPTIONS[renderSelectIndex].map((item, index) => {
+                    return (
+                      <div
+                        key={index}
+                        value={item.value}
+                        className={`bg-transparent ${
+                          collapsedOption[renderSelectIndex] ? "hidden" : ""
+                        }`}
+                      >
+                        <div
+                          className={`px-3 py-2 hover:bg-[#3433333c] rounded cursor-pointer `}
+                          onClick={() => {
+                            setCurrent(CURRENT_STATES[renderSelectIndex + 1]);
+                            stateSetters[renderSelectIndex](item.value);
+                            updateCollapsedOption(renderSelectIndex);
+                          }}
+                        >
+                          {item.label}
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div>{stateValues[renderSelectIndex]}</div>
+                )}
+              </div>
+            );
+          })}
         </div>
 
-        <button onClick={generateRecipe} disabled={loading}>
+        <button
+          onClick={generateRecipe}
+          disabled={loading}
+          className="border border-white w-1/2 px-3 py-2 text-white rounded hover:bg-white hover:text-black"
+        >
           {loading ? "Generating..." : "Generate Recipe"}
         </button>
         {error && <p style={{ color: "red" }}>{error}</p>}

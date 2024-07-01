@@ -26,7 +26,7 @@ app.get("/recipeStream", async (req, res) => {
   };
 
   try {
-    const prompt = `Create a recipe with the following instructions. Ingredients: ${ingredients}, MealType: ${mealType}, Cuisine: ${cuisine}, CookingTime: ${cookingTime}, Complexity: ${complexity}. The response will contain three main sections: Title, Ingredients, and Instructions.`;
+    const prompt = `Create a recipe with the following instructions. Ingredients: ${ingredients}, MealType: ${mealType}, Cuisine: ${cuisine}, CookingTime: ${cookingTime}, Complexity: ${complexity}. The response will only contain three main sections: Title, Ingredients, and Instructions.`;
 
     const response = await ollama.generate({
       model: "mistral",
@@ -38,7 +38,7 @@ app.get("/recipeStream", async (req, res) => {
     sendEvent(JSON.stringify(response.response));
   } catch (error) {
     console.error("Error:", error);
-    sendEvent("Error generating recipe.");
+    // sendEvent("Error generating recipe.");
   }
 
   res.on("close", () => {

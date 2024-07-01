@@ -94,7 +94,7 @@ function App() {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && ingredients) {
       setCurrent("mealType");
     }
   };
@@ -110,7 +110,7 @@ function App() {
               setIngredients(e.target.value);
             }}
             onKeyDown={handleKeyDown}
-            placeholder="Ingredients"
+            placeholder="Ingredients (Press Enter to continue)"
             name="ingredients"
             className="w-full px-3 py-2 rounded bg-transparent border border-white text-white"
           />

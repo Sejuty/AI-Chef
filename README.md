@@ -48,4 +48,17 @@ yarn dev
 
 Now you are ready to go!!
 
+## Contributing
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-branch`).
+3. Make your changes.
+4. Commit your changes (`git commit -m 'Add some feature'`).
+5. Push to the branch (`git push origin feature-branch`).
+6. Open a pull request.
+
+## Contact
+
+For any inquiries, please reach out to [tafannumnishat00@gmail.com](mailto:tafannumnishat00@gmail.com).
+
 
